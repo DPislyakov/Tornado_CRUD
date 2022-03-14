@@ -5,21 +5,21 @@ import base64
 
 items = {}
 
-# Получение полного списка запросов
-class TodoItems(RequestHandler):
 
+class TodoItems(RequestHandler):
+    # Получение полного списка запросов
     async def get(self):
         self.write({'items': items})
 
-# Получения запроса по ключу /api/get?key=key
-class GetKey(RequestHandler):
 
+class GetKey(RequestHandler):
+    # Получения запроса по ключу /api/get?key=key
     async def get(self):
         try:
             key = self.get_argument('key', None)
             if key in items.keys():
-                self.write({'body':items[key][0],
-                            'duplicates':len(items[key])-1})
+                self.write({'body': items[key][0],
+                            'duplicates': len(items[key])-1})
             else:
                 self.write({})
         except Exception as e:
@@ -59,9 +59,9 @@ class AddItem(RequestHandler):
         except Exception as e:
             self.send_error(status_code=400)
 
-# Удаление запроса по ключу /api/remove/
-class RemoveItem(RequestHandler):
 
+class RemoveItem(RequestHandler):
+    # Удаление запроса по ключу /api/remove/
     async def delete(self, key_id):
         try:
             if key_id in items.keys():
@@ -72,9 +72,9 @@ class RemoveItem(RequestHandler):
         except Exception as e:
             self.send_error(status_code=400)
 
-# Изменение тела запроса и создание нового ключа, счетчик дубликатов обнуляется /api/update/
-class UpdateItem(RequestHandler):
 
+class UpdateItem(RequestHandler):
+    # Изменение тела запроса и создание нового ключа, счетчик дубликатов обнуляется /api/update/
     async def put(self, key_id):
         try:
             if key_id in items.keys():
@@ -108,9 +108,10 @@ class UpdateItem(RequestHandler):
         except Exception as e:
             self.send_error(status_code=400)
 
-# Получение процента дубликатов от общего количества запросов /api/statistic
-# В случае отсутствия дубликатов возвращаем уведомление об их отсутствии
+
 class StatisticDupl(RequestHandler):
+    # Получение процента дубликатов от общего количества запросов /api/statistic
+    # В случае отсутствия дубликатов возвращаем уведомление об их отсутствии
     async def get(self):
         try:
             count_duplicates = 0
@@ -132,7 +133,7 @@ class StatisticDupl(RequestHandler):
 
 def make_app():
     urls = [
-        ("/",TodoItems),
+        ("/", TodoItems),
         ("/api/get", GetKey),
         (r"/api/add/([^/]+)?", AddItem),
         (r"/api/remove/([^/]+)?", RemoveItem),
